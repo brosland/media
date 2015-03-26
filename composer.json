@@ -1,0 +1,23 @@
+{
+	"name": "brosland/media",
+	"description": "Nette extension for managing files and images.",
+	"keywords": ["brosland", "media", "kdyby", "nette"],
+	"homepage": "",
+	"authors": [
+		{
+			"name": "Martin Bros",
+			"email": "mbskot@gmail.com"
+		}
+	],
+	"autoload": {
+		"psr-0": {
+			"brosland\\media": "src/"
+		}
+	},
+	"minimum-stability": "dev",
+	"require": {
+		"php": ">= 5.5",
+		"nette/nette": "~2.3.0",
+		"kdyby/doctrine": "dev-master"
+	}
+}
