@@ -11,7 +11,7 @@
 	],
 	"autoload": {
 		"psr-0": {
-			"brosland\\media": "src/"
+			"Brosland\\Media\\": "src/"
 		}
 	},
 	"minimum-stability": "dev",
