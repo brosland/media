@@ -16,8 +16,8 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 		'fileStorageDir' => '%appDir%/../storage/files',
 		'imageStorageDir' => '%appDir%/../storage/images',
 		'imagePath' => '%wwwDir%/images',
-		'fileRouter' => 'assets/<month>/<file>',
-		'imageRouter' => 'images/<format>/<month>/<image>',
+		'fileRoute' => 'assets/<month>/<file>',
+		'imageRoute' => 'images/<format>/<month>/<image>',
 		'fileMask' => '<file>',
 		'imageMask' => '<image>'
 	);
@@ -84,7 +84,7 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 		$builder->addDefinition($this->prefix('fileRouter'))
 			->setClass(\Brosland\Media\Routers\FileRouter::class)
 			->setArguments(array (
-				$config['fileRouter'],
+				$config['fileRoute'],
 				$fileProvider,
 				$filePresenterCallback,
 				$config['fileMask']
@@ -93,7 +93,7 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 		$builder->addDefinition($this->prefix('imageRouter'))
 			->setClass(\Brosland\Media\Routers\ImageRouter::class)
 			->setArguments(array (
-				$config['imageRouter'],
+				$config['imageRoute'],
 				$imageProvider,
 				$imageFormatProvider,
 				$imagePresenterCallback,
