@@ -16,8 +16,8 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 		'fileStorageDir' => '%appDir%/../storage/files',
 		'imageStorageDir' => '%appDir%/../storage/images',
 		'imagePath' => '%wwwDir%/images',
-		'fileRoute' => 'assets/<month>/<file>',
-		'imageRoute' => 'images/<format>/<month>/<image>',
+		'fileRouter' => 'assets/<month>/<file>',
+		'imageRouter' => 'images/<format>/<month>/<image>',
 		'fileMask' => '<file>',
 		'imageMask' => '<image>'
 	);
@@ -81,19 +81,19 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 			->setArguments(array ($imageStorage))
 			->setAutowired(FALSE);
 
-		$builder->addDefinition($this->prefix('fileRoute'))
-			->setClass(\Brosland\Media\Routes\FileRoute::class)
+		$builder->addDefinition($this->prefix('fileRouter'))
+			->setClass(\Brosland\Media\Routers\FileRouter::class)
 			->setArguments(array (
-				$config['fileRoute'],
+				$config['fileRouter'],
 				$fileProvider,
 				$filePresenterCallback,
 				$config['fileMask']
 			))->setAutowired(FALSE);
 
-		$builder->addDefinition($this->prefix('imageRoute'))
-			->setClass(\Brosland\Media\Routes\ImageRoute::class)
+		$builder->addDefinition($this->prefix('imageRouter'))
+			->setClass(\Brosland\Media\Routers\ImageRouter::class)
 			->setArguments(array (
-				$config['imageRoute'],
+				$config['imageRouter'],
 				$imageProvider,
 				$imageFormatProvider,
 				$imagePresenterCallback,
@@ -116,8 +116,8 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 			->addSetup(\Brosland\Media\Latte\MediaMacros::class . '::install(?->getCompiler())', array ('@self'));
 
 		$builder->getDefinition('brosland.routerFactory')
-			->addSetup('addRouter', array ($builder->getDefinition($this->prefix('fileRoute'))))
-			->addSetup('addRouter', array ($builder->getDefinition($this->prefix('imageRoute'))));
+			->addSetup('addRouter', array ($builder->getDefinition($this->prefix('fileRouter'))))
+			->addSetup('addRouter', array ($builder->getDefinition($this->prefix('imageRouter'))));
 	}
 
 	/**

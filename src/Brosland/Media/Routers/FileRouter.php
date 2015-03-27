@@ -1,6 +1,6 @@
 <?php
 
-namespace Brosland\Media\Routes;
+namespace Brosland\Media\Routers;
 
 use Brosland\Media\IFileCallback,
 	Brosland\Media\IFileProvider,
@@ -9,7 +9,7 @@ use Brosland\Media\IFileCallback,
 	Nette\Http\IRequest,
 	Nette\Application\Request;
 
-class FileRoute extends \Nette\Object implements \Nette\Application\IRouter
+class FileRouter extends \Nette\Object implements \Nette\Application\IRouter
 {
 	/**
 	 * @var Route

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brosland\Media\Routes;
+namespace Brosland\Media\Routers;
 
 use Brosland\Media\IFileProvider,
 	Brosland\Media\IImageFormatProvider,
@@ -10,7 +10,7 @@ use Brosland\Media\IFileProvider,
 	Nette\Http\IRequest,
 	Nette\Application\Request;
 
-class ImageRoute extends \Nette\Object implements \Nette\Application\IRouter
+class ImageRouter extends \Nette\Object implements \Nette\Application\IRouter
 {
 	/**
 	 * @var \Nette\Application\Routers\Route
