@@ -81,7 +81,7 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 			->setArguments(array ($imageStorage))
 			->setAutowired(FALSE);
 
-		$builder->addDefinition($this->prefix('fileRouter'))
+		$fileRouter = $builder->addDefinition($this->prefix('fileRouter'))
 			->setClass(\Brosland\Media\Routers\FileRouter::class)
 			->setArguments(array (
 				$config['fileRoute'],
@@ -90,7 +90,7 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 				$config['fileMask']
 			))->setAutowired(FALSE);
 
-		$builder->addDefinition($this->prefix('imageRouter'))
+		$imageRouter = $builder->addDefinition($this->prefix('imageRouter'))
 			->setClass(\Brosland\Media\Routers\ImageRouter::class)
 			->setArguments(array (
 				$config['imageRoute'],
@@ -104,6 +104,13 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 			->setClass(\Brosland\Media\Models\MediaEventSubscriber::class)
 			->setArguments(array ($fileStorage, $imageStorage))
 			->addTag(\Kdyby\Events\DI\EventsExtension::TAG_SUBSCRIBER);
+
+		if ($builder->hasDefinition('router'))
+		{
+			$builder->getDefinition('router')
+				->addSetup('offsetSet', array (NULL, $fileRouter))
+				->addSetup('offsetSet', array (NULL, $imageRouter));
+		}
 	}
 
 	public function beforeCompile()
@@ -114,10 +121,6 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 
 		$builder->getDefinition('nette.latteFactory')
 			->addSetup(\Brosland\Media\Latte\MediaMacros::class . '::install(?->getCompiler())', array ('@self'));
-
-		$builder->getDefinition('brosland.routerFactory')
-			->addSetup('addRouter', array ($builder->getDefinition($this->prefix('fileRouter'))))
-			->addSetup('addRouter', array ($builder->getDefinition($this->prefix('imageRouter'))));
 	}
 
 	/**
