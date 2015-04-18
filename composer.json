@@ -2,7 +2,8 @@
 	"name": "brosland/media",
 	"description": "Nette extension for managing files and images.",
 	"keywords": ["brosland", "media", "kdyby", "nette"],
-	"homepage": "",
+	"homepage": "http://bros.land",
+	"license": ["MIT"],
 	"authors": [
 		{
 			"name": "Martin Bros",
@@ -17,7 +18,7 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">= 5.5",
-		"nette/nette": "~2.3.0",
+		"nette/nette": "~2.3",
 		"kdyby/doctrine": "dev-master"
 	}
 }
