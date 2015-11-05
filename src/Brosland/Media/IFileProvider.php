@@ -6,8 +6,8 @@ interface IFileProvider
 {
 
 	/**
-	 * @param string $fullname
+	 * @param string $name
 	 * @return IFile
 	 */
-	public function findOneByFullname($fullname);
+	public function findOneByName($name);
 }

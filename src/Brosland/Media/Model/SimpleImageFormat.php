@@ -1,12 +1,13 @@
 <?php
 
-namespace Brosland\Media\Models;
+namespace Brosland\Media\Model;
 
 use Brosland\Media\IFile,
 	Nette\Utils\Image;
 
 class SimpleImageFormat extends \Nette\Object implements \Brosland\Media\IImageFormat
 {
+
 	/**
 	 * @var string
 	 */
@@ -14,19 +15,11 @@ class SimpleImageFormat extends \Nette\Object implements \Brosland\Media\IImageF
 	/**
 	 * @var int
 	 */
-	private $width;
-	/**
-	 * @var int
-	 */
-	private $height;
+	private $width, $height;
 	/**
 	 * @var bool
 	 */
-	private $crop;
-	/**
-	 * @var bool
-	 */
-	private $resizeSmallPicture = FALSE;
+	private $crop, $resizeSmallPicture = FALSE;
 
 
 	/**

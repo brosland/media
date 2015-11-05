@@ -1,19 +1,20 @@
 <?php
 
-namespace Brosland\Media\Models;
+namespace Brosland\Media\Model;
 
 use Kdyby\Doctrine\EntityDao;
 
 class FileProvider extends \Nette\Object implements \Brosland\Media\IFileProvider
 {
+
 	/**
-	 * @var \Kdyby\Doctrine\EntityDao
+	 * @var EntityDao
 	 */
 	private $fileDao;
 
 
 	/**
-	 * @param \Kdyby\Doctrine\EntityDao $fileDao
+	 * @param EntityDao $fileDao
 	 */
 	public function __construct(EntityDao $fileDao)
 	{
@@ -21,12 +22,12 @@ class FileProvider extends \Nette\Object implements \Brosland\Media\IFileProvide
 	}
 
 	/**
-	 * @param string $fullname
+	 * @param string $name
 	 * @return \Brosland\Media\IFile
 	 */
-	public function findOneByFullname($fullname)
+	public function findOneByName($name)
 	{
-		$parts = explode('-', $fullname, 2);
+		$parts = explode('-', $name, 2);
 
 		if (count($parts) < 2)
 		{

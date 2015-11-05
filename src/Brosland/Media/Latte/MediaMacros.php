@@ -32,16 +32,16 @@ class MediaMacros extends \Latte\Macros\MacroSet
 	{
 		$me = new static($compiler);
 		// file
-		$me->addMacro('file', array ($me, 'macroFile'));
+		$me->addMacro('file', [$me, 'macroFile']);
 		// n:fhref
 		$me->addMacro('fhref', NULL, NULL, function (MacroNode $node, PhpWriter $writer) use ($me)
 		{
 			return ' ?> href="<?php ' . $me->macroFile($node, $writer) . ' ?>"<?php ';
 		});
 		// image
-		$me->addMacro('image', array ($me, 'macroImage'));
+		$me->addMacro('image', [$me, 'macroImage']);
 		// img
-		$me->addMacro('img', array ($me, 'macroImage'));
+		$me->addMacro('img', [$me, 'macroImage']);
 		// n:src
 		$me->addMacro('src', NULL, NULL, function (MacroNode $node, PhpWriter $writer) use ($me)
 		{
@@ -81,9 +81,9 @@ class MediaMacros extends \Latte\Macros\MacroSet
 
 		list($file) = $data;
 
-		return $writer->write("echo %escape(\$_presenter->link('//:Nette:Micro:', array('file'=>"
-				. $writer->formatWord("{$file}->getFullname()") . ",'month'=>"
-				. $writer->formatWord("{$file}->getUploaded()->format('Ym')") . ')))');
+		return $writer->write("echo %escape(\$_presenter->link('//:Nette:Micro:', ['file'=>"
+				. $writer->formatWord("{$file}->getName()") . ",'month'=>"
+				. $writer->formatWord("{$file}->getUploaded()->format('Ym')") . ']))');
 	}
 
 	/**
@@ -113,8 +113,8 @@ class MediaMacros extends \Latte\Macros\MacroSet
 
 		list($image, $format) = $data;
 
-		return $writer->write("echo %escape(\$_presenter->link('//:Nette:Micro:', array('image'=>"
-				. $writer->formatWord("{$image}->getFullname()") . ",'format'=>" . $writer->formatWord($format)
-				. ",'month'=>" . $writer->formatWord("{$image}->getUploaded()->format('Ym')") . ')))');
+		return $writer->write("echo %escape(\$_presenter->link('//:Nette:Micro:', ['image'=>"
+				. $writer->formatWord("{$image}->getName()") . ",'format'=>" . $writer->formatWord($format)
+				. ",'month'=>" . $writer->formatWord("{$image}->getUploaded()->format('Ym')") . ']))');
 	}
 }

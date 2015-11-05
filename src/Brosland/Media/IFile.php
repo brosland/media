@@ -8,12 +8,12 @@ interface IFile
 	/**
 	 * @return string
 	 */
-	public function getFullname();
+	public function getLabel();
 
 	/**
 	 * @return string
 	 */
-	public function getLabel();
+	public function getName();
 
 	/**
 	 * @return string

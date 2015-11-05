@@ -11,6 +11,7 @@ use Brosland\Media\IFileCallback,
 
 class FileRouter extends \Nette\Object implements \Nette\Application\IRouter
 {
+
 	/**
 	 * @var Route
 	 */
@@ -21,22 +22,23 @@ class FileRouter extends \Nette\Object implements \Nette\Application\IRouter
 	 * @param string $mask example '/some/<file>'
 	 * @param IFileProvider $fileProvider
 	 * @param IFileCallback $callback
-	 * @param string $fullnameMask example '<file>'
+	 * @param string $nameMask example '<file>'
 	 */
-	public function __construct($mask, IFileProvider $fileProvider, IFileCallback $callback, $fullnameMask = '<file>')
+	public function __construct($mask, IFileProvider $fileProvider,
+		IFileCallback $callback, $nameMask = '<file>')
 	{
 		$this->route = new Route($mask, function ($file)
-			use ($fileProvider, $callback, $fullnameMask)
+			use ($fileProvider, $callback, $nameMask)
 		{
-			$fullname = str_replace(array ('<file>'), array ($file), $fullnameMask);
-			$fileEntity = $fileProvider->findOneByFullname($fullname);
+			$name = str_replace(['<file>'], [$file], $nameMask);
+			$fileEntity = $fileProvider->findOneByName($name);
 
 			if (!$fileEntity)
 			{
 				throw new \Nette\Application\BadRequestException('File not found', 404);
 			}
 
-			return \Nette\Utils\Callback::invokeArgs($callback, array ($fileEntity));
+			return \Nette\Utils\Callback::invokeArgs($callback, [$fileEntity]);
 		});
 	}
 

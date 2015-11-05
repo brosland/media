@@ -1,36 +1,51 @@
 <?php
 
-namespace Brosland\Media\Models;
+namespace Brosland\Media\Model;
 
 use Brosland\Media\IFileStorage,
 	Brosland\Media\IImageStorage,
 	Doctrine\ORM\Event\LifecycleEventArgs,
 	Doctrine\ORM\Events;
 
-class MediaEventSubscriber extends \Brosland\Models\EventSubscriber
+class MediaSubscriber implements \Kdyby\Events\Subscriber
 {
+
 	/**
-	 * @var \Brosland\Media\IFileStorage $fileStorage
+	 * @var IFileStorage $fileStorage
 	 */
 	private $fileStorage;
 	/**
-	 * @var \Brosland\Media\IImageStorage $imageStorage
+	 * @var IImageStorage $imageStorage
 	 */
 	private $imageStorage;
 
 
 	/**
-	 * @param \Brosland\Media\IFileStorage $fileStorage
-	 * @param \Brosland\Media\IImageStorage $imageStorage
+	 * @param IFileStorage $fileStorage
+	 * @param IImageStorage $imageStorage
 	 */
-	public function __construct(IFileStorage $fileStorage, IImageStorage $imageStorage)
+	public function __construct(IFileStorage $fileStorage,
+		IImageStorage $imageStorage)
 	{
 		$this->fileStorage = $fileStorage;
 		$this->imageStorage = $imageStorage;
 	}
 
 	/**
-	 * @param \Doctrine\ORM\Event\LifecycleEventArgs
+	 * @param LifecycleEventArgs $args
+	 */
+	public function prePersist(LifecycleEventArgs $args)
+	{
+		$entity = $args->getEntity();
+
+		if ($entity instanceof FileEntity && empty($entity->getOrdering()))
+		{
+			$entity->setOrdering((new \DateTime())->getTimestamp());
+		}
+	}
+
+	/**
+	 * @param LifecycleEventArgs $args
 	 */
 	public function postPersist(LifecycleEventArgs $args)
 	{
@@ -41,8 +56,10 @@ class MediaEventSubscriber extends \Brosland\Models\EventSubscriber
 			return;
 		}
 
-		$entity->setOrdering($entity->getId());
-		$this->getDao($args)->save($entity);
+		$entity->setName($entity->getId() . '-' . $entity->getName());
+
+		$args->getEntityManager()->persist($entity)
+			->flush();
 
 		if ($entity instanceof ImageEntity)
 		{
@@ -55,9 +72,9 @@ class MediaEventSubscriber extends \Brosland\Models\EventSubscriber
 	}
 
 	/**
-	 * @param \Doctrine\ORM\Event\LifecycleEventArgs
+	 * @param LifecycleEventArgs $args
 	 */
-	public function preRemove(LifecycleEventArgs $args)
+	public function postRemove(LifecycleEventArgs $args)
 	{
 		$entity = $args->getEntity();
 
@@ -76,6 +93,6 @@ class MediaEventSubscriber extends \Brosland\Models\EventSubscriber
 	 */
 	public function getSubscribedEvents()
 	{
-		return array (Events::postPersist, Events::preRemove);
+		return [Events::prePersist, Events::postPersist, Events::postRemove];
 	}
 }

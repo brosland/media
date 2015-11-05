@@ -1,15 +1,16 @@
 <?php
 
-namespace Brosland\Media\Models;
+namespace Brosland\Media\Model;
 
 use Brosland\Media\IImageFormat;
 
 class ImageFormatProvider extends \Nette\Object implements \Brosland\Media\IImageFormatProvider
 {
+
 	/**
 	 * @var IImageFormat[]
 	 */
-	private $imageFormats = array ();
+	private $imageFormats = [];
 
 
 	/**
@@ -22,7 +23,7 @@ class ImageFormatProvider extends \Nette\Object implements \Brosland\Media\IImag
 
 	/**
 	 * @param string $name
-	 * @return \Brosland\Media\IImageFormat
+	 * @return IImageFormat
 	 */
 	public function findOneByName($name)
 	{
@@ -35,7 +36,7 @@ class ImageFormatProvider extends \Nette\Object implements \Brosland\Media\IImag
 	}
 
 	/**
-	 * @return \Brosland\Media\IImageFormat[]
+	 * @return IImageFormat[]
 	 */
 	public function findAll()
 	{

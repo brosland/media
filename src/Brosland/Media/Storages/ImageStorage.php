@@ -4,10 +4,12 @@ namespace Brosland\Media\Storages;
 
 use Brosland\Media\IFile,
 	Brosland\Media\IImageFormat,
-	Brosland\Media\IImageFormatProvider;
+	Brosland\Media\IImageFormatProvider,
+	Nette\InvalidStateException;
 
 class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 {
+
 	/**
 	 * @var string
 	 */
@@ -23,7 +25,8 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 	 * @param string $cacheStoragePath
 	 * @param IImageFormatProvider $imageFormatProvider
 	 */
-	public function __construct($storagePath, $cacheStoragePath, IImageFormatProvider $imageFormatProvider)
+	public function __construct($storagePath, $cacheStoragePath,
+		IImageFormatProvider $imageFormatProvider)
 	{
 		parent::__construct($storagePath);
 
@@ -44,14 +47,14 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 		}
 
 		return $this->cacheStoragePath . DIRECTORY_SEPARATOR . $imageFormat->getName() . DIRECTORY_SEPARATOR
-			. $image->getUploaded()->format('Ym') . DIRECTORY_SEPARATOR . $image->getFullname();
+			. $image->getUploaded()->format('Ym') . DIRECTORY_SEPARATOR . $image->getName();
 	}
 
 	/**
 	 * @param IFile $image
 	 * @param IImageFormat $imageFormat
 	 * @return string path to file in assets
-	 * @throws \Nette\InvalidStateException
+	 * @throws InvalidStateException
 	 */
 	public function createFormatedImage(IFile $image, IImageFormat $imageFormat)
 	{
@@ -59,7 +62,7 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 
 		if (!file_exists($path))
 		{
-			throw new \Nette\InvalidStateException("File '$path' not found in storage.");
+			throw new InvalidStateException("File '$path' not found in storage.");
 		}
 
 		$formatedImagePath = $this->getPath($image, $imageFormat);
@@ -67,12 +70,12 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 
 		if (!is_dir($dir) && !@mkdir($dir, 0777, TRUE))
 		{
-			throw new \Nette\InvalidStateException("Can not create dir '$dir'.");
+			throw new InvalidStateException("Can not create dir '$dir'.");
 		}
 
 		if (!copy($path, $formatedImagePath))
 		{
-			throw new \Nette\InvalidStateException("Can not copy image to '$formatedImagePath'.");
+			throw new InvalidStateException("Can not copy image to '$formatedImagePath'.");
 		}
 
 		$imageFormat->apply($image, $formatedImagePath);
@@ -84,9 +87,12 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 	 * @param IFile $image
 	 * @param IImageFormat[] $imageFormats if is NULL all image formats will be removed
 	 */
-	public function removeFormatedImages(IFile $image, array $imageFormats = NULL)
+	public function removeFormatedImages(IFile $image, array $imageFormats = [])
 	{
-		$imageFormats = $imageFormats == NULL ? $this->imageFormatProvider->findAll() : $imageFormats;
+		if (empty($imageFormats))
+		{
+			$imageFormats = $this->imageFormatProvider->findAll();
+		}
 
 		foreach ($imageFormats as $imageFormat)
 		{
@@ -108,7 +114,6 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 
 	/**
 	 * @param IFile $image
-	 * @throws \Nette\InvalidStateException
 	 */
 	public function remove(IFile $image)
 	{

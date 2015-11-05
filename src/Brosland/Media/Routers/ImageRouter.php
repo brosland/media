@@ -12,6 +12,7 @@ use Brosland\Media\IFileProvider,
 
 class ImageRouter extends \Nette\Object implements \Nette\Application\IRouter
 {
+
 	/**
 	 * @var \Nette\Application\Routers\Route
 	 */
@@ -25,7 +26,9 @@ class ImageRouter extends \Nette\Object implements \Nette\Application\IRouter
 	 * @param IImageCallback $callback
 	 * @param string example '<image>'
 	 */
-	public function __construct($mask, IFileProvider $imageProvider, IImageFormatProvider $imageFormatProvider, IImageCallback $callback, $imageMask = '<image>')
+	public function __construct($mask, IFileProvider $imageProvider,
+		IImageFormatProvider $imageFormatProvider, IImageCallback $callback,
+		$imageMask = '<image>')
 	{
 		$this->route = new Route($mask, function ($image, $format)
 			use ($imageProvider, $imageFormatProvider, $callback, $imageMask)
@@ -37,15 +40,15 @@ class ImageRouter extends \Nette\Object implements \Nette\Application\IRouter
 				throw new \Nette\Application\BadRequestException('Image format not found.', 404);
 			}
 
-			$fullname = str_replace(array ('<image>'), array ($image), $imageMask);
-			$imageEntity = $imageProvider->findOneByFullname($fullname);
+			$name = str_replace(['<image>'], [$image], $imageMask);
+			$imageEntity = $imageProvider->findOneByName($name);
 
 			if (!$imageEntity)
 			{
 				throw new \Nette\Application\BadRequestException('Image not found.', 404);
 			}
 
-			return \Nette\Utils\Callback::invokeArgs($callback, array ($imageEntity, $imageFormatEntity));
+			return \Nette\Utils\Callback::invokeArgs($callback, [$imageEntity, $imageFormatEntity]);
 		});
 	}
 

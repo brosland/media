@@ -2,10 +2,13 @@
 
 namespace Brosland\Media\Storages;
 
-use Brosland\Media\IFile;
+use Brosland\Media\IFile,
+	Nette\InvalidArgumentException,
+	Nette\InvalidStateException;
 
 class FileStorage extends \Nette\Object implements \Brosland\Media\IFileStorage
 {
+
 	/**
 	 * @var string
 	 */
@@ -27,14 +30,14 @@ class FileStorage extends \Nette\Object implements \Brosland\Media\IFileStorage
 	public function getPath(IFile $file)
 	{
 		return $this->storagePath . DIRECTORY_SEPARATOR . $file->getUploaded()->format('Ym')
-			. DIRECTORY_SEPARATOR . $file->getFullname();
+			. DIRECTORY_SEPARATOR . $file->getName();
 	}
 
 	/**
 	 * @param string $source
 	 * @param IFile $file
 	 * @return string path to file in storage
-	 * @throws \Nette\InvalidStateException
+	 * @throws InvalidStateException
 	 */
 	public function save($source, IFile $file)
 	{
@@ -43,12 +46,12 @@ class FileStorage extends \Nette\Object implements \Brosland\Media\IFileStorage
 
 		if (!is_dir($dir) && !@mkdir($dir, 0777, TRUE))
 		{
-			throw new \Nette\InvalidStateException("Can not create dir '$dir'.");
+			throw new InvalidStateException("Can not create dir '$dir'.");
 		}
 
 		if (!rename($source, $path))
 		{
-			throw new \Nette\InvalidStateException("Can not move file from '$source' to '$path'.");
+			throw new InvalidStateException("Can not move file from '$source' to '$path'.");
 		}
 
 		return $path;
@@ -56,7 +59,7 @@ class FileStorage extends \Nette\Object implements \Brosland\Media\IFileStorage
 
 	/**
 	 * @param IFile $file
-	 * @throws \Nette\InvalidStateException
+	 * @throws InvalidStateException
 	 */
 	public function remove(IFile $file)
 	{
@@ -64,7 +67,7 @@ class FileStorage extends \Nette\Object implements \Brosland\Media\IFileStorage
 
 		if (!@unlink($path))
 		{
-			throw new \Nette\InvalidStateException('File not found.');
+			throw new InvalidStateException('File not found.');
 		}
 
 		$dir = dirname($path);
@@ -83,7 +86,7 @@ class FileStorage extends \Nette\Object implements \Brosland\Media\IFileStorage
 	{
 		if (!is_readable($dir))
 		{
-			throw new \Nette\InvalidArgumentException("Dir '$dir' not found.");
+			throw new InvalidArgumentException("Dir '$dir' not found.");
 		}
 
 		return (count(scandir($dir)) == 2);

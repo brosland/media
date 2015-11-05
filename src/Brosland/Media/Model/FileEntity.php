@@ -1,8 +1,9 @@
 <?php
 
-namespace Brosland\Media\Models;
+namespace Brosland\Media\Model;
 
-use Doctrine\ORM\Mapping as ORM,
+use DateTime,
+	Doctrine\ORM\Mapping as ORM,
 	Nette\Http\FileUpload;
 
 /**
@@ -11,18 +12,16 @@ use Doctrine\ORM\Mapping as ORM,
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="integer")
  * @ORM\DiscriminatorMap({
- * 	"0" = "Brosland\Media\Models\FileEntity",
- * 	"1" = "Brosland\Media\Models\ImageEntity"
+ * 	"0" = "Brosland\Media\Model\FileEntity",
+ * 	"1" = "Brosland\Media\Model\ImageEntity"
  * })
- * @ORM\HasLifecycleCallbacks
  */
-class FileEntity extends \Kdyby\Doctrine\Entities\BaseEntity implements \Brosland\Media\IFile
+class FileEntity implements \Brosland\Media\IFile
 {
-	use \Kdyby\Doctrine\Entities\Attributes\Identifier;
+	use \Kdyby\Doctrine\Entities\MagicAccessors,
+	 \Kdyby\Doctrine\Entities\Attributes\Identifier;
 
-	const SIZE_SCALE_KB = 1,
-		SIZE_SCALE_MB = 2,
-		SIZE_SCALE_GB = 3;
+	const SIZE_SCALE_KB = 1, SIZE_SCALE_MB = 2, SIZE_SCALE_GB = 3;
 
 
 	/**
@@ -47,7 +46,7 @@ class FileEntity extends \Kdyby\Doctrine\Entities\BaseEntity implements \Broslan
 	private $size;
 	/**
 	 * @ORM\Column(type="datetime")
-	 * @var \DateTime
+	 * @var DateTime
 	 */
 	private $uploaded;
 	/**
@@ -56,13 +55,13 @@ class FileEntity extends \Kdyby\Doctrine\Entities\BaseEntity implements \Broslan
 	 */
 	private $ordering = 0;
 	/**
-	 * @var \Nette\Http\FileUpload
+	 * @var FileUpload
 	 */
 	private $fileUpload;
 
 
 	/**
-	 * @param \Nette\Http\FileUpload $fileUpload
+	 * @param FileUpload $fileUpload
 	 */
 	public function __construct(FileUpload $fileUpload)
 	{
@@ -70,7 +69,7 @@ class FileEntity extends \Kdyby\Doctrine\Entities\BaseEntity implements \Broslan
 		$this->name = $fileUpload->getSanitizedName();
 		$this->contentType = $fileUpload->getContentType();
 		$this->size = $fileUpload->getSize();
-		$this->uploaded = new \DateTime();
+		$this->uploaded = new DateTime();
 		$this->fileUpload = $fileUpload;
 	}
 
@@ -102,6 +101,17 @@ class FileEntity extends \Kdyby\Doctrine\Entities\BaseEntity implements \Broslan
 	}
 
 	/**
+	 * @param string $name
+	 * @return self
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+
+		return $this;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getContentType()
@@ -118,15 +128,7 @@ class FileEntity extends \Kdyby\Doctrine\Entities\BaseEntity implements \Broslan
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getFullname()
-	{
-		return $this->id . '-' . $this->name;
-	}
-
-	/**
-	 * @return \DateTime
+	 * @return DateTime
 	 */
 	public function getUploaded()
 	{
@@ -134,10 +136,10 @@ class FileEntity extends \Kdyby\Doctrine\Entities\BaseEntity implements \Broslan
 	}
 
 	/**
-	 * @param $uploaded \DateTime
+	 * @param $uploaded DateTime
 	 * @return self
 	 */
-	public function setUploaded(\DateTime $uploaded)
+	public function setUploaded(DateTime $uploaded)
 	{
 		$this->uploaded = $uploaded;
 

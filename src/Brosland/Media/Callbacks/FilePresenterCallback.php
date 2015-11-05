@@ -8,6 +8,7 @@ use Brosland\Media\IFile,
 
 class FilePresenterCallback extends \Nette\Object implements \Brosland\Media\IFileCallback
 {
+
 	/**
 	 * @var \Brosland\Media\IFileStorage
 	 */

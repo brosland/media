@@ -4,22 +4,24 @@ namespace Brosland\Media\Utils;
 
 class FileIcon extends \Nette\Object
 {
+
 	/**
 	 * @var array
 	 */
-	public static $ICONS = array (
-		'fa fa-file-archive-o' => array ('zip', 'rar', 'tar', '7z'),
-		'fa fa-file-audio-o' => array ('wav', 'mp3', 'ogg', 'flac'),
-		'fa fa-file-video-o' => array ('avi', 'mpg', '3gp', 'mp4', 'flv'),
-		'fa fa-file-image-o' => array ('bmp', 'jpg', 'png', 'gif'),
-		'fa fa-file-code-o' => array ('css', 'js', 'php', 'java', 'cpp', 'c',
-			'sql', 'xml', 'latte', 'html'),
-		'fa fa-file-text-o' => array ('txt', 'neon', 'ini'),
-		'fa fa-file-word-o' => array ('doc', 'docx', 'rtf', 'odt'),
-		'fa fa-file-excel-o' => array ('xls', 'xlt', 'xlsx'),
-		'fa fa-file-powerpoint-o' => array ('ppt', 'pptx', 'odp'),
-		'fa fa-file-pdf-o' => array ('pdf')
-	);
+	public static $ICONS = [
+		'fa fa-file-archive-o' => ['zip', 'rar', 'tar', '7z'],
+		'fa fa-file-audio-o' => ['wav', 'mp3', 'ogg', 'flac'],
+		'fa fa-file-video-o' => ['avi', 'mpg', '3gp', 'mp4', 'flv'],
+		'fa fa-file-image-o' => ['bmp', 'jpg', 'png', 'gif'],
+		'fa fa-file-code-o' => [
+			'css', 'js', 'php', 'java', 'cpp', 'c', 'sql', 'xml', 'latte', 'html'
+		],
+		'fa fa-file-text-o' => ['txt', 'neon', 'ini'],
+		'fa fa-file-word-o' => ['doc', 'docx', 'rtf', 'odt'],
+		'fa fa-file-excel-o' => ['xls', 'xlt', 'xlsx'],
+		'fa fa-file-powerpoint-o' => ['ppt', 'pptx', 'odp'],
+		'fa fa-file-pdf-o' => ['pdf']
+	];
 	/**
 	 * @var string
 	 */
