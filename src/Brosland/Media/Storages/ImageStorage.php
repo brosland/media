@@ -35,6 +35,20 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 	}
 
 	/**
+	 * @param string $source
+	 * @param IFile $file
+	 * @return string path to file in storage
+	 */
+	public function save($source, IFile $file)
+	{
+		$path = parent::save($source, $file);
+
+		$this->fixImageOrientation($path);
+
+		return $path;
+	}
+
+	/**
 	 * @param IFile $image
 	 * @param IImageFormat $imageFormat
 	 * @return string path to file in storage
@@ -127,5 +141,33 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 		parent::remove($image);
 
 		$this->removeFormatedImages($image);
+	}
+
+	/**
+	 * @param string $path
+	 */
+	private function fixImageOrientation($path)
+	{
+		$exif = exif_read_data($path);
+
+		if (!empty($exif['Orientation']))
+		{
+			$image = \Nette\Utils\Image::fromFile($path);
+
+			switch ($exif['Orientation'])
+			{
+				case 8:
+					$image = $image->rotate(90, 0);
+					break;
+				case 3:
+					$image = $image->rotate(180, 0);
+					break;
+				case 6:
+					$image = $image->rotate(-90, 0);
+					break;
+			}
+
+			$image->save($path);
+		}
 	}
 }
