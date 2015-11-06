@@ -16,6 +16,7 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 	private static $DEFAULTS = [
 		'fileStorageDir' => '%appDir%/../storage',
 		'imageStorageDir' => '%appDir%/../storage',
+		'fileRouteMask' => 'assets/<file>',
 		'imagePath' => '%wwwDir%/images/<format>/<month>/<image>'
 	];
 
@@ -83,6 +84,7 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 			$builder->addDefinition($this->prefix('fileRouter'))
 				->setFactory(\Brosland\Media\Routers\FileRouterFactory::class . '::createRouter')
 				->setArguments([
+					$config['fileRouteMask'],
 					$builder->getDefinition($this->prefix('filePresenterCallback'))
 				])->setAutowired(FALSE);
 		}

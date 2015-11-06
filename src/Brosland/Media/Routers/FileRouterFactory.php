@@ -9,10 +9,11 @@ class FileRouterFactory extends \Nette\Object
 {
 
 	/**
+	 * @param string $mask example assets/<month>/<file>
 	 * @param IFileCallback $presenterCallback
 	 * @return Route
 	 */
-	public static function createRouter(IFileCallback $presenterCallback)
+	public static function createRouter($mask, IFileCallback $presenterCallback)
 	{
 		$filterIn = function ($params)
 		{
@@ -23,7 +24,7 @@ class FileRouterFactory extends \Nette\Object
 
 			return $params;
 		};
-		$filterOut = function ($params)
+		$filterOut = function ($params) use ($mask)
 		{
 			if ($params['presenter'] != 'Nette:Micro' || !isset($params['file']))
 			{
@@ -32,7 +33,15 @@ class FileRouterFactory extends \Nette\Object
 
 			if ($params['file'] instanceof \Brosland\Media\IFile)
 			{
+				$file = $params['file'];
+				/* @var $file \Brosland\Media\IFile */
+
 				$params['file'] = $params['file']->getName();
+
+				if (preg_match('/<month>/', $mask))
+				{
+					$params['month'] = $file->getUploaded()->format('Ym');
+				}
 			}
 
 			return $params;
@@ -42,7 +51,7 @@ class FileRouterFactory extends \Nette\Object
 			return \Nette\Utils\Callback::invokeArgs($presenterCallback, [$file]);
 		};
 
-		$route = new Route('assets/<file>', [
+		$route = new Route($mask, [
 			Route::PRESENTER_KEY => 'Nette:Micro',
 			'callback' => $callback,
 			NULL => [

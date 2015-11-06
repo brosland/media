@@ -11,7 +11,7 @@ class ImageRouterFactory extends \Nette\Object
 {
 
 	/**
-	 * @param string $mask
+	 * @param string $mask example images/<format>/<month>/<image>
 	 * @param IImageCallback $presenterCallback
 	 * @return Route
 	 */
