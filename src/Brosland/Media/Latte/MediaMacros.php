@@ -82,8 +82,7 @@ class MediaMacros extends \Latte\Macros\MacroSet
 		list($file) = $data;
 
 		return $writer->write("echo %escape(\$_presenter->link('//:Nette:Micro:', ['file'=>"
-				. $writer->formatWord("{$file}->getName()") . ",'month'=>"
-				. $writer->formatWord("{$file}->getUploaded()->format('Ym')") . ']))');
+				. $writer->formatWord("{$file}") . ']))');
 	}
 
 	/**
@@ -114,7 +113,6 @@ class MediaMacros extends \Latte\Macros\MacroSet
 		list($image, $format) = $data;
 
 		return $writer->write("echo %escape(\$_presenter->link('//:Nette:Micro:', ['image'=>"
-				. $writer->formatWord("{$image}->getName()") . ",'format'=>" . $writer->formatWord($format)
-				. ",'month'=>" . $writer->formatWord("{$image}->getUploaded()->format('Ym')") . ']))');
+				. $writer->formatWord("{$image}") . ",'format'=>" . $writer->formatWord($format) . ']))');
 	}
 }

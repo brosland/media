@@ -6,8 +6,8 @@ interface IImageCallback
 {
 
 	/**
-	 * @param IFile $file
-	 * @param IImageFormat $imageFormat
+	 * @param string $imageName
+	 * @param string $imageFormatName
 	 */
-	public function __invoke(IFile $file, IImageFormat $imageFormat);
+	public function __invoke($imageName, $imageFormatName);
 }

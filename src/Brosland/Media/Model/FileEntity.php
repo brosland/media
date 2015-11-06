@@ -30,7 +30,7 @@ class FileEntity implements \Brosland\Media\IFile
 	 */
 	private $label;
 	/**
-	 * @ORM\Column
+	 * @ORM\Column(unique=TRUE)
 	 * @var string
 	 */
 	private $name;

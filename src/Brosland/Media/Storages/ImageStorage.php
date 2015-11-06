@@ -46,8 +46,15 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 			return parent::getPath($image);
 		}
 
-		return $this->cacheStoragePath . DIRECTORY_SEPARATOR . $imageFormat->getName() . DIRECTORY_SEPARATOR
-			. $image->getUploaded()->format('Ym') . DIRECTORY_SEPARATOR . $image->getName();
+		$search = ['/', '<format>', '<month>', '<image>'];
+		$replace = [
+			DIRECTORY_SEPARATOR,
+			$imageFormat->getName(),
+			$image->getUploaded()->format('Ym'),
+			$image->getName()
+		];
+
+		return str_replace($search, $replace, $this->cacheStoragePath);
 	}
 
 	/**

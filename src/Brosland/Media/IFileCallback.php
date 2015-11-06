@@ -6,7 +6,7 @@ interface IFileCallback
 {
 
 	/**
-	 * @param IFile $file
+	 * @param string $fileName
 	 */
-	public function __invoke(IFile $file);
+	public function __invoke($fileName);
 }
