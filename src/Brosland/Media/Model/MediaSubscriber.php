@@ -18,6 +18,10 @@ class MediaSubscriber implements \Kdyby\Events\Subscriber
 	 * @var IImageStorage $imageStorage
 	 */
 	private $imageStorage;
+	/**
+	 * @var FileEntity[]
+	 */
+	private $deletedFiles = [];
 
 
 	/**
@@ -72,19 +76,47 @@ class MediaSubscriber implements \Kdyby\Events\Subscriber
 	}
 
 	/**
-	 * @param LifecycleEventArgs $args
+	 * @param \Doctrine\ORM\Event\OnFlushEventArgs $args
 	 */
-	public function postRemove(LifecycleEventArgs $args)
+	public function onFlush(\Doctrine\ORM\Event\OnFlushEventArgs $args)
 	{
-		$entity = $args->getEntity();
+		$entityManager = $args->getEntityManager();
 
-		if ($entity instanceof ImageEntity)
+		$entities = $entityManager->getUnitOfWork()->getScheduledEntityDeletions();
+		$ids = [];
+
+		foreach ($entities as $entity)
 		{
-			$this->imageStorage->remove($entity);
+			if ($entity instanceof FileEntity)
+			{
+				$ids[] = $entity->getId();
+			}
 		}
-		else if ($entity instanceof FileEntity)
+
+		if (!empty($ids))
 		{
-			$this->fileStorage->remove($entity);
+			$this->deletedFiles = $entityManager->getRepository(FileEntity::class)->findBy(['id' => $ids]);
+		}
+	}
+
+	/**
+	 * @param \Doctrine\ORM\Event\PostFlushEventArgs $args
+	 */
+	public function postFlush(\Doctrine\ORM\Event\PostFlushEventArgs $args)
+	{
+		$files = $this->deletedFiles;
+		$this->deletedFiles = [];
+
+		foreach ($files as $file)
+		{
+			if ($file instanceof ImageEntity)
+			{
+				$this->imageStorage->remove($file);
+			}
+			else if ($file instanceof FileEntity)
+			{
+				$this->fileStorage->remove($file);
+			}
 		}
 	}
 
@@ -93,6 +125,6 @@ class MediaSubscriber implements \Kdyby\Events\Subscriber
 	 */
 	public function getSubscribedEvents()
 	{
-		return [Events::prePersist, Events::postPersist, Events::postRemove];
+		return [Events::prePersist, Events::postPersist, Events::onFlush, Events::postFlush];
 	}
 }
