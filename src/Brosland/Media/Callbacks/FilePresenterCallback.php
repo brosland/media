@@ -3,7 +3,7 @@
 namespace Brosland\Media\Callbacks;
 
 use Brosland\Media\IFileStorage,
-	Kdyby\Doctrine\EntityDao,
+ Brosland\Media\IFileProvider,
 	Nette\Application\BadRequestException,
 	Nette\Application\Responses\FileResponse;
 
@@ -13,7 +13,7 @@ class FilePresenterCallback extends \Nette\Object implements \Brosland\Media\IFi
 	/**
 	 * @var EntityDao
 	 */
-	private $fileDao;
+	private $fileProvider;
 	/**
 	 * @var IFileStorage
 	 */
@@ -21,12 +21,12 @@ class FilePresenterCallback extends \Nette\Object implements \Brosland\Media\IFi
 
 
 	/**
-	 * @param EntityDao $fileDao
+	 * @param IFileProvider $fileProvider
 	 * @param IFileStorage $storage
 	 */
-	public function __construct(EntityDao $fileDao, IFileStorage $storage)
+	public function __construct(IFileProvider $fileProvider, IFileStorage $storage)
 	{
-		$this->fileDao = $fileDao;
+		$this->fileProvider = $fileProvider;
 		$this->storage = $storage;
 	}
 
@@ -37,7 +37,7 @@ class FilePresenterCallback extends \Nette\Object implements \Brosland\Media\IFi
 	 */
 	public function __invoke($fileName)
 	{
-		$file = $this->fileDao->findOneBy(['name' => $fileName]);
+		$file = $this->fileProvider->findOneByName($fileName);
 
 		if (!$file)
 		{

@@ -2,12 +2,7 @@
 
 namespace Brosland\Media\DI;
 
-use Brosland\Media\Model\FileEntity,
-	Brosland\Media\Model\ImageEntity,
-	Kdyby\Doctrine\DI\IEntityProvider,
-	Nette\DI\Statement;
-
-class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvider
+class MediaExtension extends \Nette\DI\CompilerExtension
 {
 
 	/**
@@ -61,7 +56,7 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 			$builder->addDefinition($this->prefix('filePresenterCallback'))
 				->setClass(\Brosland\Media\Callbacks\FilePresenterCallback::class)
 				->setArguments([
-					new Statement('@doctrine.dao', [FileEntity::class]),
+					'@' . \Brosland\Media\IFileProvider::class,
 					$fileStorage
 				])
 				->setAutowired(FALSE);
@@ -72,7 +67,7 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 			$builder->addDefinition($this->prefix('imagePresenterCallback'))
 				->setClass(\Brosland\Media\Callbacks\ImagePresenterCallback::class)
 				->setArguments([
-					new Statement('@doctrine.dao', [ImageEntity::class]),
+					'@' . \Brosland\Media\IImageProvider::class,
 					$imageFormatProvider,
 					$imageStorage
 				])
@@ -100,11 +95,6 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 					$builder->getDefinition($this->prefix('imagePresenterCallback'))
 				])->setAutowired(FALSE);
 		}
-
-		$builder->addDefinition($this->prefix('mediaSubscriber'))
-			->setClass(\Brosland\Media\Model\MediaSubscriber::class)
-			->setArguments([$fileStorage, $imageStorage])
-			->addTag(\Kdyby\Events\DI\EventsExtension::TAG_SUBSCRIBER);
 	}
 
 	public function beforeCompile()
@@ -115,13 +105,5 @@ class MediaExtension extends \Nette\DI\CompilerExtension implements IEntityProvi
 
 		$builder->getDefinition('nette.latteFactory')
 			->addSetup(\Brosland\Media\Latte\MediaMacros::class . '::install(?->getCompiler())', ['@self']);
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getEntityMappings()
-	{
-		return ['Brosland\Media\Model' => __DIR__ . '/../Model'];
 	}
 }

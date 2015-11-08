@@ -3,8 +3,8 @@
 namespace Brosland\Media\Callbacks;
 
 use Brosland\Media\IImageFormatProvider,
+	Brosland\Media\IImageProvider,
 	Brosland\Media\IImageStorage,
-	Kdyby\Doctrine\EntityDao,
 	Nette\Application\BadRequestException,
 	Nette\Utils\Image;
 
@@ -12,9 +12,9 @@ class ImagePresenterCallback extends \Nette\Object implements \Brosland\Media\II
 {
 
 	/**
-	 * @var EntityDao
+	 * @var IImageProvider
 	 */
-	private $imageDao;
+	private $imageProvider;
 	/**
 	 * @var IImageFormatProvider
 	 */
@@ -26,14 +26,14 @@ class ImagePresenterCallback extends \Nette\Object implements \Brosland\Media\II
 
 
 	/**
-	 * @param EntityDao $imageDao
+	 * @param IImageProvider $imageProvider
 	 * @param IImageFormatProvider $imageFormatProvider
 	 * @param IImageStorage $storage
 	 */
-	public function __construct(EntityDao $imageDao,
+	public function __construct(IImageProvider $imageProvider,
 		IImageFormatProvider $imageFormatProvider, IImageStorage $storage)
 	{
-		$this->imageDao = $imageDao;
+		$this->imageProvider = $imageProvider;
 		$this->imageFormatProvider = $imageFormatProvider;
 		$this->storage = $storage;
 	}
@@ -45,7 +45,7 @@ class ImagePresenterCallback extends \Nette\Object implements \Brosland\Media\II
 	 */
 	public function __invoke($imageName, $imageFormatName)
 	{
-		$image = $this->imageDao->findOneBy(['name' => $imageName]);
+		$image = $this->imageProvider->findOneByName($imageName);
 
 		if (!$image)
 		{
