@@ -29,12 +29,12 @@ class FileIcon extends \Nette\Object
 
 
 	/**
-	 * @param string $filePath
+	 * @param string $ext
 	 * @return string
 	 */
-	public static final function getIcon($filePath)
+	public static final function getIcon($ext)
 	{
-		$ext = \Nette\Utils\Strings::lower(pathinfo($filePath, PATHINFO_EXTENSION));
+		$ext = \Nette\Utils\Strings::lower($ext);
 
 		foreach (self::$ICONS as $icon => $extensions)
 		{
