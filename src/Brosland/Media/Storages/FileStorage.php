@@ -30,7 +30,7 @@ class FileStorage extends \Nette\Object implements \Brosland\Media\IFileStorage
 	public function getPath(IFile $file)
 	{
 		return $this->storagePath . DIRECTORY_SEPARATOR . $file->getUploaded()->format('Ym')
-			. DIRECTORY_SEPARATOR . $file->getName();
+			. DIRECTORY_SEPARATOR . $file->getName() . '.' . $file->getExt();
 	}
 
 	/**

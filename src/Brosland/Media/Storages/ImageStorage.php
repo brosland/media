@@ -65,7 +65,7 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 			DIRECTORY_SEPARATOR,
 			$imageFormat->getName(),
 			$image->getUploaded()->format('Ym'),
-			$image->getName()
+			$image->getName() . '.' . $image->getExt()
 		];
 
 		return str_replace($search, $replace, $this->cacheStoragePath);

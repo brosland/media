@@ -36,7 +36,7 @@ class FileRouterFactory extends \Nette\Object
 				$file = $params['file'];
 				/* @var $file \Brosland\Media\IFile */
 
-				$params['file'] = $params['file']->getName();
+				$params['file'] = $file->getName() . '.' . $file->getExt();
 
 				if (preg_match('/<month>/', $mask))
 				{

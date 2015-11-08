@@ -38,7 +38,7 @@ class ImageRouterFactory extends \Nette\Object
 				$image = $params['image'];
 				/* @var $file IFile */
 
-				$params['image'] = $image->getName();
+				$params['image'] = $image->getName() . '.' . $image->getExt();
 
 				if (preg_match('/<month>/', $mask))
 				{
