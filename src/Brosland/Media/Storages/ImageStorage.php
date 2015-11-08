@@ -148,7 +148,7 @@ class ImageStorage extends FileStorage implements \Brosland\Media\IImageStorage
 	 */
 	private function fixImageOrientation($path)
 	{
-		$exif = exif_read_data($path);
+		$exif = @exif_read_data($path);
 
 		if (!empty($exif['Orientation']))
 		{
