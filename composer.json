@@ -4,12 +4,6 @@
 	"keywords": ["nette", "brosland", "media"],
 	"homepage": "http://bros.land",
 	"license": ["MIT"],
-	"authors": [
-		{
-			"name": "Martin Bros",
-			"email": "mbskot@gmail.com"
-		}
-	],
 	"autoload": {
 		"psr-0": {
 			"Brosland\\Media\\": "src/"
