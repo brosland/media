@@ -2,7 +2,7 @@
 
 namespace Brosland\Media\Utils;
 
-class FileIcon extends \Nette\Object
+class FileIcon
 {
 
 	/**

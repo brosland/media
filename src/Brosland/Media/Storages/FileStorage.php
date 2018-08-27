@@ -6,7 +6,7 @@ use Brosland\Media\IFile,
 	Nette\InvalidArgumentException,
 	Nette\InvalidStateException;
 
-class FileStorage extends \Nette\Object implements \Brosland\Media\IFileStorage
+class FileStorage implements \Brosland\Media\IFileStorage
 {
 
 	/**

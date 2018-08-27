@@ -8,7 +8,7 @@ use Brosland\Media\IImageFormatProvider,
 	Nette\Application\BadRequestException,
 	Nette\Utils\Image;
 
-class ImagePresenterCallback extends \Nette\Object implements \Brosland\Media\IImageCallback
+class ImagePresenterCallback implements \Brosland\Media\IImageCallback
 {
 
 	/**

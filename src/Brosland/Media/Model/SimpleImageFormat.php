@@ -5,7 +5,7 @@ namespace Brosland\Media\Model;
 use Brosland\Media\IFile,
 	Nette\Utils\Image;
 
-class SimpleImageFormat extends \Nette\Object implements \Brosland\Media\IImageFormat
+class SimpleImageFormat implements \Brosland\Media\IImageFormat
 {
 
 	/**

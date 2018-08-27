@@ -4,7 +4,7 @@ namespace Brosland\Media\Model;
 
 use Brosland\Media\IImageFormat;
 
-class ImageFormatProvider extends \Nette\Object implements \Brosland\Media\IImageFormatProvider
+class ImageFormatProvider implements \Brosland\Media\IImageFormatProvider
 {
 
 	/**

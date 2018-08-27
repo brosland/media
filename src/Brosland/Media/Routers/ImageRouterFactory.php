@@ -7,7 +7,7 @@ use Brosland\Media\IFile,
 	Brosland\Media\IImageFormat,
 	Nette\Application\Routers\Route;
 
-class ImageRouterFactory extends \Nette\Object
+class ImageRouterFactory
 {
 
 	/**

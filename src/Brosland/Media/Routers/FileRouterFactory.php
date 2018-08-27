@@ -5,7 +5,7 @@ namespace Brosland\Media\Routers;
 use Brosland\Media\IFileCallback,
 	Nette\Application\Routers\Route;
 
-class FileRouterFactory extends \Nette\Object
+class FileRouterFactory
 {
 
 	/**

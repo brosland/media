@@ -7,7 +7,7 @@ use Brosland\Media\IFileStorage,
 	Nette\Application\BadRequestException,
 	Nette\Application\Responses\FileResponse;
 
-class FilePresenterCallback extends \Nette\Object implements \Brosland\Media\IFileCallback
+class FilePresenterCallback implements \Brosland\Media\IFileCallback
 {
 
 	/**
